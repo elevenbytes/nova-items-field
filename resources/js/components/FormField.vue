@@ -1,5 +1,5 @@
 <template>
-    <default-field :field="field" :full-width-content="field.fullWidth" :show-help-text="showHelpText">
+    <default-field :field="field" :full-width-content="field.fullWidth">
         <template slot="field" class="nova-items-field">
             <div class="nova-items-field-input-wrapper flex border border-40 p-4" v-if="field.listFirst == false && ! maxReached">
                 <input
@@ -46,7 +46,7 @@
                         />
                         </div>
                         <div v-if="hasErrors(field.attribute + '.' + index)" class="help-text error-text -mt-2 text-danger py-2">
-                            <p v-html="arrayErrors[field.attribute + '.' + index][0]" />
+                            <p v-html="errors.errors[field.attribute + '.' + index][0]" />
                         </div>
                     </li>
                 </draggable>
@@ -152,7 +152,7 @@ export default {
 
         hasErrors(key)
         {
-            return this.arrayErrors.hasOwnProperty(key);
+            return this.errors.errors.hasOwnProperty(key);
 		}
     },
     computed: {
@@ -173,15 +173,6 @@ export default {
         'items': {
             handler: function (items) {
                 this.value = JSON.stringify(items);
-            },
-            deep: true
-        },
-        'errors': {
-            handler: function (errors) {
-                if(errors.errors.hasOwnProperty(this.field.attribute))
-                {
-                    this.arrayErrors = errors.errors[this.field.attribute][0]
-                }
             },
             deep: true
         }

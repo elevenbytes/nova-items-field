@@ -3,6 +3,7 @@
 namespace NovaItemsField;
 
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class ArrayRules implements Rule
 {
@@ -29,11 +30,16 @@ class ArrayRules implements Rule
     {
         $input = [$attribute => json_decode($value)];
 
+
         $validator = \Validator::make($input, $this->rules, [], [ "$attribute.*" => 'input']);
 
         $this->message = $validator->errors();
 
-        return $validator->passes();
+        if (!$validator->passes()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        return true;
     }
 
     /**
