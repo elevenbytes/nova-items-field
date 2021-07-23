@@ -17,7 +17,7 @@
                     class="btn btn-default btn-primary ml-3 cursor-pointer font-sans"
                 />
             </div>
-            <ul ref="novaitemslist" :style="maxHeight" v-if="items.length" class="nova-items-field-input-items list-reset border border-40 py-2">
+            <ul ref="novaitemslist" :style="maxHeight" v-if="items.length" :class="['nova-items-field-input-items list-reset border border-40 py-2', { 'border-danger': hasErrors(this.field.attribute) }]">
                 <draggable v-model="items" :options="{ disabled: field.draggable == false, handle: '.sortable-handle' }">
                 <li
                     v-for="(item, index) in items"
@@ -51,6 +51,9 @@
                     </li>
                 </draggable>
             </ul>
+            <div v-if="hasErrors(field.attribute)" class="help-text error-text -mt-2 text-danger py-2">
+                <p v-html="errors.errors[field.attribute][0]" />
+            </div>
              <div class="nova-items-field-input-wrapper flex border border-40 p-4"  v-if="field.listFirst && ! maxReached">
                 <input
                     v-model="newItem"
